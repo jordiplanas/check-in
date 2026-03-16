@@ -1,0 +1,71 @@
+:root {
+    --cupra-copper: #b38b5f;
+    --cupra-black: #1a1a1a;
+    --cupra-grey: #2c2c2c;
+    --text-white: #ffffff;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--cupra-black);
+    color: var(--text-white);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: var(--cupra-grey);
+    padding: 2rem;
+    border-radius: 12px;
+    border-bottom: 4px solid var(--cupra-copper);
+    margin-bottom: 2rem;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hidden { display: none; }
+
+.btn-primary {
+    background-color: transparent;
+    color: var(--cupra-copper);
+    border: 2px solid var(--cupra-copper);
+    padding: 15px 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.btn-primary:active {
+    background-color: var(--cupra-copper);
+    color: white;
+}
+
+.user-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--cupra-copper);
+    margin: 10px 0;
+}
+
+.tag-id {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
