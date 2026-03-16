@@ -3,158 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CUPRA NFC Scanner</title>
-    <style>
-        :root {
-            --cupra-copper: #b38e5d;
-            --cupra-black: #111111;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--cupra-black);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-bottom: 3px solid var(--cupra-copper);
-        }
-        h1 { font-size: 1.5rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        #status { margin: 20px 0; color: #aaa; font-size: 0.9rem; min-height: 40px; }
-        
-        #scanBtn {
-            background-color: var(--cupra-copper);
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-            text-transform: uppercase;
-        }
-        #scanBtn:active { transform: scale(0.95); }
-
-        #user-card {
-            margin-top: 30px;
-            padding: 20px;
-            background: #222;
-            border-radius: 10px;
-            display: none;
-            text-align: left;
-            animation: fadeIn 0.5s ease;
-        }
-        .user-info-row { margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .label { color: var(--cupra-copper); font-size: 0.7rem; text-transform: uppercase; display: block; }
-        .value { font-size: 1.1rem; font-weight: 500; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <title>Cupra NFC Reader</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>NFC User Scan</h1>
-        
-        <button id="scanBtn">Escanear Pulsera</button>
-        
-        <div id="status">Presiona el botón para iniciar</div>
+        <header>
+            <img src="https://www.cupraofficial.com/content/dam/countries/global/cupra-website/logos/cupra-logo.png" alt="Cupra Logo" class="logo">
+            <h1>Acceso NFC</h1>
+        </header>
 
-        <div id="user-card">
-            <div class="user-info-row">
-                <span class="label">Nombre Completo</span>
-                <span id="u-name" class="value"></span>
+        <main id="app">
+            <div id="status-card" class="card">
+                <p id="message">Presiona el botón para comenzar a escanear la pulsera.</p>
+                <div id="user-info" class="hidden">
+                    <hr>
+                    <h2>Bienvenido,</h2>
+                    <p class="user-name"><span id="first_name"></span> <span id="last_name"></span></p>
+                    <p class="tag-id">ID: <span id="display-tag"></span></p>
+                </div>
             </div>
-            <div class="user-info-row">
-                <span class="label">Cargo / Job Role</span>
-                <span id="u-role" class="value"></span>
-            </div>
-            <div class="user-info-row">
-                <span class="label">Tag Identificado</span>
-                <span id="u-tag" class="value"></span>
-            </div>
-            <div class="user-info-row">
-                <span class="label">País</span>
-                <span id="u-country" class="value"></span>
-            </div>
-        </div>
+
+            <button id="scanBtn" class="btn-primary">ESCANEAR PULSERA</button>
+        </main>
+
+        <footer>
+            <p>© 2026 Metaverso Technologies</p>
+        </footer>
     </div>
 
-    <script>
-        const scanBtn = document.getElementById('scanBtn');
-        const status = document.getElementById('status');
-        const userCard = document.getElementById('user-card');
-
-        // --- CONFIGURACIÓN DE TU API ---
-        const API_TOKEN =  '2v7k141f3zIWKosOjtHUYdaiUbBqI6g6'; // <--- PEGA TU TOKEN AQUÍ
-        const BASE_URL = 'https://cupra.metaversotechnologies.com/items/users';
-
-        scanBtn.addEventListener('click', async () => {
-            // 1. Verificar soporte
-            if (!('NDEFReader' in window)) {
-                status.innerHTML = "❌ Tu navegador no soporta Web NFC.<br>Usa Chrome en Android (HTTPS).";
-                return;
-            }
-
-            try {
-                const ndef = new NDEFReader();
-                await ndef.scan();
-                
-                status.innerText = "Sintonizando... Acerca la pulsera al sensor.";
-                userCard.style.display = 'none';
-
-                ndef.onreadingerror = () => {
-                    status.innerText = "❌ Error de lectura. Intenta de nuevo.";
-                };
-
-                ndef.onreading = ({ serialNumber }) => {
-                    // Formatear el ID (quitar ":" y pasar a minúsculas)
-                    const cleanTagId = serialNumber.replace(/:/g, '').toLowerCase();
-                    status.innerText = `Tag detectado: ${cleanTagId}`;
-                    
-                    fetchUserData(cleanTagId);
-                };
-
-            } catch (error) {
-                status.innerText = "Error: " + error.message;
-                console.error(error);
-            }
-        });
-
-        async function fetchUserData(tagId) {
-            status.innerText = "Consultando base de datos...";
-            
-            // Filtramos directamente por tagId en la consulta
-            const filterUrl = `${BASE_URL}?filter[tagId][_eq]=${tagId}`;
-
-            try {
-                const response = await fetch(filterUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${API_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) throw new Error("Error en la respuesta del servidor");
-
-                const result = await response.json();
-                
-                // Directus devuelve un array en "data"
-                if (result.data && result.data.length > 0) {
-                    const user = result.data[0];
-                    showUser(user);
-                    status.innerText = "✅ Usuario encontrado
+    <script src="app.js"></script>
+</body>
+</html>
