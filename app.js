@@ -26,15 +26,22 @@ scanBtn.addEventListener('click', async () => {
             updateMessage("❌ Error al leer la pulsera. Inténtalo de nuevo.");
         };
 
-        ndef.onreading = async (event) => {
-            const tagId = event.serialNumber;
-            updateMessage("✅ Pulsera detectada. Consultando...");
-            await fetchUser(tagId);
-            
-            // Reactivamos el botón después de la lectura
-            scanBtn.innerText = "ESCANEAR OTRA VEZ";
-            scanBtn.disabled = false;
-        };
+  ndef.onreading = async (event) => {
+    // 1. Limpiamos el ID: eliminamos ":" y pasamos a minúsculas
+    const tagId = event.serialNumber.replace(/:/g, '').toLowerCase();
+    
+    console.log("Tag detectado original:", event.serialNumber);
+    console.log("Tag procesado para API:", tagId);
+
+    updateMessage(`✅ Pulsera: ${tagId}. Consultando...`);
+    
+    // 2. Llamamos a la API con el ID limpio
+    await fetchUser(tagId);
+    
+    // 3. Reactivamos la interfaz
+    scanBtn.innerText = "ESCANEAR OTRA VEZ";
+    scanBtn.disabled = false;
+};
 
     } catch (error) {
         updateMessage(`❌ Error: ${error.message}`);
