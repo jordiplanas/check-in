@@ -1,4 +1,4 @@
-const TOKEN = "2v7k141f3zIWKosOjtHUYdaiUbBqI6g6";
+const TOKEN = "REPLACE_ME_WITH_TOKEN";
 const API_URL = "https://cupra.metaversotechnologies.com/items/users";
 
 const scanBtn = document.getElementById('scanBtn');
