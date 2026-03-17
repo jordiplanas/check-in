@@ -7,6 +7,9 @@ const userInfoEl = document.getElementById('user-info');
 const firstNameEl = document.getElementById('first_name');
 const lastNameEl = document.getElementById('last_name');
 const displayTagEl = document.getElementById('display-tag');
+const countryEl = document.getElementById('country');
+const languageEl = document.getElementById('language');
+const jobRoleEl = document.getElementById('job_role');
 
 scanBtn.addEventListener('click', async () => {
     if (!('NDEFReader' in window)) {
@@ -78,8 +81,16 @@ async function fetchUser(tagId) {
 
 function showUser(user, tagId) {
     messageEl.innerText = "¡Lectura exitosa!";
-    firstNameEl.innerText = user.first_name;
-    lastNameEl.innerText = user.last_name;
+    
+    // Datos principales
+    firstNameEl.innerText = user.first_name || "N/A";
+    lastNameEl.innerText = user.last_name || "N/A";
+    
+    // Nuevos datos (usamos || por si el campo viene vacío en la API)
+    countryEl.innerText = user.country || "No especificado";
+    languageEl.innerText = user.language || "No especificado";
+    jobRoleEl.innerText = user.job_role || "No especificado";
+    
     displayTagEl.innerText = tagId;
     userInfoEl.classList.remove('hidden');
 }
