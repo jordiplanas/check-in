@@ -18,11 +18,18 @@
             <div id="status-card" class="card">
                 <p id="message">Presiona el botón para comenzar a escanear la pulsera.</p>
                 <div id="user-info" class="hidden">
-                    <hr>
-                    <h2>Bienvenido,</h2>
-                    <p class="user-name"><span id="first_name"></span> <span id="last_name"></span></p>
-                    <p class="tag-id">ID: <span id="display-tag"></span></p>
-                </div>
+    <hr>
+    <h2>Bienvenido,</h2>
+    <p class="user-name"><span id="first_name"></span> <span id="last_name"></span></p>
+    
+    <div class="user-details">
+        <p><strong>País:</strong> <span id="country"></span></p>
+        <p><strong>Idioma:</strong> <span id="language"></span></p>
+        <p><strong>Cargo:</strong> <span id="job_role"></span></p>
+    </div>
+
+    <p class="tag-id">ID: <span id="display-tag"></span></p>
+</div>
             </div>
 
             <button id="scanBtn" class="btn-primary">ESCANEAR PULSERA</button>
